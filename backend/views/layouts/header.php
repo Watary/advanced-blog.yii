@@ -1,3 +1,8 @@
+<?php
+
+use yii\helpers\Url;
+
+?>
 <div class="app-header header-shadow">
     <div class="app-header__logo">
         <div class="logo-src"></div>
@@ -48,14 +53,8 @@
                         Statistics
                     </a>
                 </li>
-                <li class="btn-group nav-item">
-                    <a href="javascript:void(0);" class="nav-link">
-                        <i class="nav-link-icon fa fa-edit"></i>
-                        Projects
-                    </a>
-                </li>
                 <li class="dropdown nav-item">
-                    <a href="javascript:void(0);" class="nav-link">
+                    <a href="<?= Url::to('setting', true) ?>" class="nav-link">
                         <i class="nav-link-icon fa fa-cog"></i>
                         Settings
                     </a>

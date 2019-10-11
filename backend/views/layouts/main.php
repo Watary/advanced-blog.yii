@@ -32,11 +32,15 @@ AppAsset::register($this);
 
     <div class="app-main">
 
-
         <?= $this->render('sidebar-left.php') ?>
 
         <div class="app-main__outer">
             <div class="app-main__inner">
+
+                <?= Breadcrumbs::widget([
+                    'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+                ]) ?>
+
                 <?= $content ?>
             </div>
 

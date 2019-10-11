@@ -60,11 +60,21 @@ return [
             'errorAction' => 'site/error',
         ],
         'urlManager' => [
-            'enablePrettyUrl' => true,
-            'showScriptName' => false,
             'rules' => [
+                '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
+                'setting' => 'site/setting',
+                'article/create' => 'articles/create',
+                'categories/update/<id:\d+>' => 'categories/update',
             ],
         ],
+    ],
+    'as access' => [
+        'class' => 'mdm\admin\components\AccessControl',
+        'allowActions' => [
+            'site/*',
+            'articles/*',
+            'categories/*',
+        ]
     ],
     'params' => $params,
 ];
