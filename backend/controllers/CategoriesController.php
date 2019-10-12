@@ -103,11 +103,17 @@ class CategoriesController extends Controller
     /**
      * Creates a new Categories model.
      * If creation is successful, the browser will be redirected to the 'view' page.
+     * @param integer $category
+     *
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($category = NULL)
     {
         $model = new Categories();
+
+        if($category){
+            $model->id_parent = $category;
+        }
 
         if ($model->load(Yii::$app->request->post())) {
 

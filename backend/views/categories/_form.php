@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use kartik\select2\Select2;
+use backend\models\Categories;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\Categories */
@@ -30,10 +31,12 @@ use kartik\select2\Select2;
 
         <?= $form->field($model, 'alias', ['template' => "{label}\n{hint}\n<div class='input-group'>{input}<div class='input-group-append'><button id='generate-alias' type='button' class='btn btn-light'>Generate alias</button></div></div>\n{error}"])->textInput(['maxlength' => true]) ?>
 
+        <?= $form->field($model, 'status')->radioList([Categories::STATUS_INACTIVE=>'Inactive', Categories::STATUS_ACTIVE => 'Active'], ['style' => 'display:inline-block'])?>
+
         <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
 
         <div class="form-group">
-            <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+            <?= Html::submitButton('Save', ['class' => 'mb-2 mr-2 btn btn-light btn-lg btn-block']) ?>
         </div>
 
         <?php ActiveForm::end(); ?>

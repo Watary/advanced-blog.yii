@@ -2,14 +2,12 @@
 
 /* @var $this yii\web\View */
 
-$this->title = 'My Yii Application';
+$this->title = 'Dashboard';
 ?>
 <div class="site-index">
 
     <div class="jumbotron">
-        <h1>Congratulations administrator!</h1>
-
-        <p class="lead">You have successfully created your Yii-powered application.</p>
+        <h1>Congratulations <?= Yii::$app->user->identity->username ?>!</h1>
     </div>
 
 

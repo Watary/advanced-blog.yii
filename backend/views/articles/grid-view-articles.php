@@ -49,8 +49,8 @@ use backend\models\Categories;
             'label'=>'Actions',
             'format' => 'raw',
             'value' => function($data){
-                return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', ['articles/view/'.$data->id])
-                    .' '.Html::a('<span class="glyphicon glyphicon-pencil"></span>', ['articles/update/'.$data->id])
+                return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', ['articles/view/'.$data->id], ['title' => 'View'])
+                    .' '.Html::a('<span class="glyphicon glyphicon-pencil"></span>', ['articles/update/'.$data->id], ['title' => 'Update'])
                     .' '.Html::a('<span class="glyphicon glyphicon-trash"></span>', ['articles/delete/'.$data->id], [
                         'title' => 'Delete',
                         'aria-label' => 'Delete',

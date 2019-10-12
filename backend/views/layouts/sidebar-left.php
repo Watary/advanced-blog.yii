@@ -2,6 +2,8 @@
 
 use yii\helpers\Url;
 
+$url = explode('/', substr(Url::current(), 1));
+
 ?>
 <div class="app-sidebar sidebar-shadow">
     <div class="app-header__logo">
@@ -42,7 +44,7 @@ use yii\helpers\Url;
             <ul class="vertical-nav-menu">
                 <li class="app-sidebar__heading">Dashboards</li>
                 <li>
-                    <a href="<?= Url::to('/', true) ?>" class="mm-active">
+                    <a href="<?= Url::to('/', true) ?>" class="<?= $url[0] == 'site' ? 'mm-active' : ''?>">
                         <i class="metismenu-icon fa fa-qrcode"></i>
                         Dashboard
                     </a>
@@ -50,25 +52,25 @@ use yii\helpers\Url;
 
                 <li class="app-sidebar__heading">Blog</li>
                 <li>
-                    <a href="<?= Url::to('categories', true) ?>">
+                    <a href="<?= Url::to('categories', true) ?>" class="<?= $url[0] == 'categories' ? 'mm-active' : ''?>">
                         <i class="metismenu-icon fa fa-sitemap"></i>
                         Categories
                     </a>
                 </li>
                 <li>
-                    <a href="<?= Url::to('articles', true) ?>">
+                    <a href="<?= Url::to('articles', true) ?>" class="<?= $url[0] == 'articles' ? 'mm-active' : ''?>">
                         <i class="metismenu-icon fa fa-th-list"></i>
                         Articles
                     </a>
                 </li>
                 <li>
-                    <a href="<?= Url::to('comments', true) ?>">
+                    <a href="<?= Url::to('comments', true) ?>" class="<?= $url[0] == 'comments' ? 'mm-active' : ''?>">
                         <i class="metismenu-icon fa fa-comments"></i>
                         Comments
                     </a>
                 </li>
                 <li>
-                    <a href="<?= Url::to('tags', true) ?>">
+                    <a href="<?= Url::to('tags', true) ?>" class="<?= $url[0] == 'tags' ? 'mm-active' : ''?>">
                         <i class="metismenu-icon fa fa-tags"></i>
                         Tags
                     </a>

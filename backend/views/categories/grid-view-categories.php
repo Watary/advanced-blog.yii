@@ -49,8 +49,8 @@ use backend\models\Articles;
             'label'=>'Actions',
             'format' => 'raw',
             'value' => function($data){
-                return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', ['categories/view/'.$data->id])
-                    .' '.Html::a('<span class="glyphicon glyphicon-pencil"></span>', ['categories/update/'.$data->id])
+                return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', ['categories/view/'.$data->id], ['title' => 'View'])
+                    .' '.Html::a('<span class="glyphicon glyphicon-pencil"></span>', ['categories/update/'.$data->id], ['title' => 'Update'])
                     .' '.Html::a('<span class="glyphicon glyphicon-trash"></span>', ['categories/delete/'.$data->id], [
                         'title' => 'Delete',
                         'aria-label' => 'Delete',

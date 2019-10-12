@@ -53,6 +53,7 @@ class ArticlesController extends Controller
      * @param integer $id
      *
      * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
     {
@@ -71,12 +72,17 @@ class ArticlesController extends Controller
     /**
      * Creates a new Articles model.
      * If creation is successful, the browser will be redirected to the 'view' page.
+     * @param integer $category
      *
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($category = NULL)
     {
         $model = new Articles();
+
+        if($category){
+            $model->id_category = $category;
+        }
 
         if ($model->load(Yii::$app->request->post())) {
             $date_post = Yii::$app->request->post();
@@ -135,17 +141,28 @@ class ArticlesController extends Controller
     }
 
     /**
-     * Delete an existing BlogArticles model.
-     * If delete is successful, the browser will be redirected to the 'view' page.
+     * Delete an existing Articles model.
      * @param integer $id
+     *
+     * @return boolean
      * @throws NotFoundHttpException if the model cannot be found
-
+     */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $isDeleted = false;
 
-        return $this->redirect(['/blog']);
-    }*/
+        if($model = $this->findModel($id)){
+            $model->id_deleted = Yii::$app->user->identity->getId();
+            $model->deleted_at = time();
+            if($model->save()){
+                $isDeleted = true;
+            }
+        }else{
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+
+        return $isDeleted;
+    }
 
     /**
      * Finds the Articles model based on its primary key value.

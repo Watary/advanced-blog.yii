@@ -39,7 +39,7 @@ class Categories extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_owner', 'title', 'alias', 'created_at'], 'required'],
+            [['id_owner', 'title', 'alias', 'status', 'created_at'], 'required'],
             [['id_owner', 'id_parent', 'status', 'id_deleted', 'created_at', 'updated_at', 'deleted_at'], 'integer'],
             [['description'], 'string'],
             [['title', 'alias'], 'string', 'max' => 255],
@@ -54,16 +54,16 @@ class Categories extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'id_owner' => 'Id Owner',
-            'id_parent' => 'Id Parent',
+            'id_owner' => 'Owner',
+            'id_parent' => 'Parent',
             'title' => 'Title',
             'description' => 'Description',
             'alias' => 'Alias',
             'status' => 'Status',
             'id_deleted' => 'Id Deleted',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
-            'deleted_at' => 'Deleted At',
+            'created_at' => 'Created at',
+            'updated_at' => 'Updated at',
+            'deleted_at' => 'Deleted at',
         ];
     }
 

@@ -5,10 +5,7 @@
 
 use backend\assets\AppAsset;
 use yii\helpers\Html;
-use yii\bootstrap\Nav;
-use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
-use common\widgets\Alert;
 
 AppAsset::register($this);
 ?>
@@ -38,6 +35,10 @@ AppAsset::register($this);
             <div class="app-main__inner">
 
                 <?= Breadcrumbs::widget([
+                    'homeLink' => [
+                        'label' => 'Dashboard',
+                        'url' => '/',
+                    ],
                     'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
                 ]) ?>
 
