@@ -2,8 +2,8 @@
 
 namespace backend\controllers;
 
-/*use app\modules\blog\models\BlogArticleMark;
-use app\modules\blog\models\BlogArticlesShow;*/
+use backend\models\ArticleMark;
+use backend\models\ArticlesShow;
 use backend\models\Tags;
 use backend\models\Articles;
 use backend\models\Categories;
@@ -56,15 +56,13 @@ class ArticlesController extends Controller
      */
     public function actionView($id)
     {
-        $model = $this->findModel($id);
-
-        if($model){
-            //$this->incrementShow($model);
+        if($model = $this->findModel($id)){
+            $this->incrementShow($model);
         }
 
         return $this->render('view', [
             'model' => $model,
-            //'isMark' => ArticleMark::issetMark($model->id, Yii::$app->user->getId()),
+            'isMark' => ArticleMark::issetMark($model->id, Yii::$app->user->getId()),
         ]);
     }
 
@@ -263,30 +261,7 @@ class ArticlesController extends Controller
      * @return boolean
      */
     private function incrementShow($model){
-        $model->count_show_all++;
-
-        if(Yii::$app->user->isGuest){
-            $model_show = ArticlesShow::find()->where(['id_article' => $model->id])->andWhere(['ip' => Yii::$app->getRequest()->getUserIP()])->one();
-        }else{
-            $model_show = ArticlesShow::find()->where(['id_article' => $model->id])->andWhere(['id_user' => Yii::$app->user->getId()])->one();
-        }
-
-        if(!$model_show){
-            $model_articles_show = new ArticlesShow();
-            $model_articles_show->id_article = $model->id;
-            if(Yii::$app->user->isGuest){
-                $model_articles_show->ip = Yii::$app->getRequest()->getUserIP();
-            }else{
-                $model_articles_show->id_user = Yii::$app->user->getId();
-            }
-            if($model_articles_show->save()){
-                $model->count_show++;
-            }
-        }
-
-        $model->save();
-
-        return true;
+        return ArticlesShow::incrementShow($model);
     }
 
     private function issetAlias($alias, $articles){

@@ -42,6 +42,9 @@ use backend\models\Articles;
                 }
             }
         ],
+        'count_show',
+        'count_show_all',
+        'mark',
         'created_at:datetime',
         'updated_at:datetime',
 

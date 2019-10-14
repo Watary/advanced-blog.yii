@@ -71,8 +71,8 @@ class Articles extends \yii\db\ActiveRecord
             'image' => 'Image',
             'alias' => 'Alias',
             'status' => 'Status',
-            'count_show_all' => 'Count Show All',
-            'count_show' => 'Count Show',
+            'count_show_all' => 'Total show',
+            'count_show' => 'Show',
             'count_comments' => 'Count Comments',
             'mark' => 'Mark',
             'id_deleted' => 'Id Deleted',
@@ -110,7 +110,6 @@ class Articles extends \yii\db\ActiveRecord
         return $this->hasMany(ArticleTag::className(), ['id_article' => 'id']);
     }
 
-    /*
     public function getArticleshow(){
         return $this->hasMany(ArticlesShow::className(), ['id_article' => 'id']);
     }
@@ -119,9 +118,11 @@ class Articles extends \yii\db\ActiveRecord
         return $this->hasMany(ArticleMark::className(), ['id_article' => 'id']);
     }
 
+    /*
     public function getComments(){
         return $this->hasMany(Comments::className(), ['id_articles' => 'id']);
-    }*/
+    }
+    */
 
     public static function count()
     {
