@@ -1,7 +1,7 @@
 <?php
 use yii\grid\GridView;
 use yii\helpers\Html;
-use backend\models\Articles;
+use backend\models\Categories;
 ?>
 <?= GridView::widget([
     'dataProvider' => $dataProvider,
@@ -27,7 +27,7 @@ use backend\models\Articles;
             'label'=>'Parent',
             'format' => 'raw',
             'value' => function($data){
-                if($data->parent->status == Articles::STATUS_ACTIVE)
+                if($data->parent->status == Categories::STATUS_ACTIVE)
                     return Html::a($data->parent->title, ['categories/view/'.$data->id]);
             }
         ],
@@ -36,10 +36,10 @@ use backend\models\Articles;
             'label'=>'Status',
             'format' => 'raw',
             'value' => function($data){
-                if($data->status == Articles::STATUS_ACTIVE){
-                    return 'Active';
+                if($data->status == Categories::STATUS_ACTIVE){
+                    return '<span class="text-success">Active</span>';
                 }else{
-                    return 'Inactive';
+                    return '<span class="text-danger">Inactive</span>';
                 }
             }
         ],

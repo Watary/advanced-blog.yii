@@ -31,6 +31,8 @@ class Articles extends \yii\db\ActiveRecord
     const STATUS_INACTIVE = 0;
     const STATUS_ACTIVE = 10;
 
+    public $tags;
+
     /**
      * {@inheritdoc}
      */
@@ -61,8 +63,8 @@ class Articles extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'id_category' => 'Id Category',
-            'id_author' => 'Id Author',
+            'id_category' => 'Category',
+            'id_author' => 'Author',
             'title' => 'Title',
             'text' => 'Text',
             'excerpt' => 'Excerpt',
@@ -104,11 +106,11 @@ class Articles extends \yii\db\ActiveRecord
         return $this->hasOne(Categories::className(), ['id' => 'id_category']);
     }
 
-    /*
     public function getArticletag(){
         return $this->hasMany(ArticleTag::className(), ['id_article' => 'id']);
     }
 
+    /*
     public function getArticleshow(){
         return $this->hasMany(ArticlesShow::className(), ['id_article' => 'id']);
     }

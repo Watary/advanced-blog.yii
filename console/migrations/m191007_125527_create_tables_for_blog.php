@@ -69,7 +69,7 @@ class m191007_125527_create_tables_for_blog extends Migration
             'alias'                 =>  $this->string(255)->notNull()->unique(),
             'description'           =>  $this->text(),
             'created_at'            =>  $this->integer(11)->notNull(),
-            'updated_ad'            =>  $this->integer(11),
+            'updated_at'            =>  $this->integer(11),
         ]);
 
         $this->createTable('{{%article_tag}}', [

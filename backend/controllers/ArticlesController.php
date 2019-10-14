@@ -3,13 +3,12 @@
 namespace backend\controllers;
 
 /*use app\modules\blog\models\BlogArticleMark;
-use app\modules\blog\models\BlogArticlesShow;
-use app\modules\blog\models\BlogTags;*/
+use app\modules\blog\models\BlogArticlesShow;*/
+use backend\models\Tags;
 use backend\models\Articles;
 use backend\models\Categories;
 use Yii;
 use yii\data\ActiveDataProvider;
-use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -91,7 +90,7 @@ class ArticlesController extends Controller
             $model->alias = $this->generateAlias($model->alias, $model->id);
 
             if($model->save()){
-                //Tags::saveTags($date_post['Articles']['tags'], $model->id);
+                Tags::saveTags($date_post['Articles']['tags'], $model->id);
                 return $this->redirect('update/' . $model->id);
             }
         }
@@ -99,7 +98,7 @@ class ArticlesController extends Controller
         return $this->render('create', [
             'model' => $model,
             'items_categories' => Categories::findListCategories(),
-            //'items_tags' => Tags::findListTags(),
+            'items_tags' => Tags::findListTags(),
         ]);
     }
 
@@ -123,7 +122,7 @@ class ArticlesController extends Controller
                 $model->alias = $model->title;
             }
 
-            //Tags::saveTags($date_post['Articles']['tags'], $model->id);
+            Tags::saveTags($date_post['Articles']['tags'], $model->id);
             $model->alias = $this->generateAlias($model->alias, $model->id);
 
             if($model->save()) {
@@ -131,12 +130,12 @@ class ArticlesController extends Controller
             }
         }
 
-        //$model->tags = $this->setTags($model);
+        $model->tags = $this->setTags($model);
 
         return $this->render('update', [
             'model' => $model,
             'items_categories' => Categories::findListCategories(),
-            //'items_tags' => Tags::findListTags(),
+            'items_tags' => Tags::findListTags(),
         ]);
     }
 

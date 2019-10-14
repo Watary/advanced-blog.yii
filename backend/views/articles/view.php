@@ -46,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?php } ?>
                     </span>
                     <span><i class="far fa-calendar-alt"></i> <?= date('d-m-Y | H:i', $model->created_at) ?></span>
-                    <?php if(false/*$model->articletag*/){ ?>
+                    <?php if($model->articletag){ ?>
                         <span>
                             <i class="fas fa-tags"></i>
                             <?php foreach ($model->articletag as $item) { ?>

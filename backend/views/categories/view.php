@@ -29,6 +29,10 @@ $this->params['category-alias'] = $model->alias ? $model->alias : 'uncategorized
             </ul>
         </div>
         <div class="card-body">
+            <?= $model->description ?>
+
+            <hr>
+
             <?= $this->render('/articles/grid-view-articles', [
                 'dataProvider' => $dataProvider,
             ])
