@@ -35,8 +35,7 @@ $this->params['category-alias'] = $model->alias ? $model->alias : 'uncategorized
 
             <?= $this->render('/articles/grid-view-articles', [
                 'dataProvider' => $dataProvider,
-            ])
-            ?>
+            ])?>
         </div>
     </div>
 </div>

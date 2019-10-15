@@ -105,8 +105,12 @@ return [
         'urlManager' => [
             'rules' => [
                 '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
+
                 'setting' => 'site/setting',
+
                 'article/create' => 'articles/create',
+                'article/update' => 'articles/update',
+
                 'categories/update/<id:\d+>' => 'categories/update',
             ],
         ],

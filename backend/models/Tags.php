@@ -2,6 +2,7 @@
 
 namespace backend\models;
 
+use common\models\User;
 use Yii;
 
 /**
@@ -72,6 +73,19 @@ class Tags extends \yii\db\ActiveRecord
         ];
     }
 
+    public function getArticletag(){
+        return $this->hasMany(ArticleTag::className(), ['id_tag' => 'id']);
+    }
+
+    public function getOwner(){
+        return $this->hasOne(User::className(), ['id' => 'id_owner']);
+    }
+
+    public function getArticles(){
+        return $this->hasMany(Articles::className(), ['id' => 'id_article'])
+            ->viaTable('article_tag', ['id_tag' => 'id']);
+    }
+
     public static function findListTags(){
         $tags = Tags::find()->all();
 
@@ -94,21 +108,33 @@ class Tags extends \yii\db\ActiveRecord
         return Tags::find()->all();
     }
 
-    public static function saveTags($tags, $id_article){
+    public static function findTag($id){
+        return Tags::find()
+            ->where(['id' => $id])
+            ->one();
+    }
+
+    public static function issetAlias($alias, $tag){
+        return Tags::find()
+            ->where(['<>','id', $tag])
+            ->andWhere(['alias' => $alias])
+            ->count();
+    }
+
+    public static function saveTags($tags, $id_article)
+    {
         $old_tags = [];
         $new_tags = [];
         $tags_article = ArticleTag::findAllTagsFotArticle($id_article);
         $tags_article_array = [];
-        $rus=array('А','Б','В','Г','Д','Е','Ё','Ж','З','И','Й','К','Л','М','Н','О','П','Р','С','Т','У','Ф','Х','Ц','Ч','Ш','Щ','Ъ','Ы','Ь','Э','Ю','Я','а','б','в','г','д','е','ё','ж','з','и','й','к','л','м','н','о','п','р','с','т','у','ф','х','ц','ч','ш','щ','ъ','ы','ь','э','ю','я',' ','і','ї',',');
-        $lat=array('a','b','v','g','d','e','e','gh','z','i','y','k','l','m','n','o','p','r','s','t','u','f','h','c','ch','sh','sch','y','y','y','e','yu','ya','a','b','v','g','d','e','e','gh','z','i','y','k','l','m','n','o','p','r','s','t','u','f','h','c','ch','sh','sch','y','y','y','e','yu','ya',' ','i','i','');
 
-        if($tags_article) {
+        if ($tags_article) {
             foreach ($tags_article as $item) {
                 $tags_article_array[] = $item->id_tag;
             }
         }
 
-        if($tags) {
+        if ($tags) {
             foreach ($tags as $item) {
                 $var = (int)$item;
                 if ($item === (string)$var) {
@@ -119,7 +145,7 @@ class Tags extends \yii\db\ActiveRecord
             }
         }
 
-        if($old_tags) {
+        if ($old_tags) {
             foreach ($old_tags as $item) {
                 if (!in_array($item, $tags_article_array)) {
                     $model_article_tag = new ArticleTag();
@@ -130,7 +156,7 @@ class Tags extends \yii\db\ActiveRecord
             }
         }
 
-        if($tags_article_array) {
+        if ($tags_article_array) {
             foreach ($tags_article_array as $item) {
                 if (!in_array($item, $old_tags)) {
                     $model_article_tag = ArticleTag::find()->where(['id_article' => $id_article])->andWhere(['id_tag' => $item])->one();
@@ -139,13 +165,13 @@ class Tags extends \yii\db\ActiveRecord
             }
         }
 
-        if($new_tags) {
+        if ($new_tags) {
             foreach ($new_tags as $item) {
                 $model_tag = new Tags();
 
                 $model_tag->id_owner = Yii::$app->user->getId();
                 $model_tag->title = $item;
-                $model_tag->alias = str_replace(' ', '-', trim(strtolower(str_replace($rus, $lat, preg_replace("/  +/", " ", $item)))));
+                $model_tag->alias = Tags::generateAlias($item, NULL);
 
                 if ($model_tag->save()) {
                     $model_article_tag = new ArticleTag();
@@ -155,5 +181,33 @@ class Tags extends \yii\db\ActiveRecord
                 }
             }
         }
+    }
+
+    private static function isAlias($alias, $tag){
+
+        for(;;) {
+            if (Tags::issetAlias($alias, $tag)) {
+                $alias .= '-new';
+            }else{
+                break;
+            }
+        }
+
+        return $alias;
+    }
+
+    public static function generateAlias($alias, $tag){
+        $rus=array('А','Б','В','Г','Д','Е','Ё','Ж','З','И','Й','К','Л','М','Н','О','П','Р','С','Т','У','Ф','Х','Ц','Ч','Ш','Щ','Ъ','Ы','Ь','Э','Ю','Я','а','б','в','г','д','е','ё','ж','з','и','й','к','л','м','н','о','п','р','с','т','у','ф','х','ц','ч','ш','щ','ъ','ы','ь','э','ю','я',' ','і','ї');
+        $lat=array('a','b','v','g','d','e','e','gh','z','i','y','k','l','m','n','o','p','r','s','t','u','f','h','c','ch','sh','sch','y','y','y','e','yu','ya','a','b','v','g','d','e','e','gh','z','i','y','k','l','m','n','o','p','r','s','t','u','f','h','c','ch','sh','sch','y','y','y','e','yu','ya',' ','i','i');
+
+        $alias= preg_replace("/  +/"," ",$alias);
+
+        $alias = str_replace($rus, $lat, $alias);
+
+        $alias = str_replace(' ', '-', trim(strtolower($alias)));
+
+        $alias = str_replace([':',';','.',',','<','>','?','#','%'], "", $alias);
+
+        return Tags::isAlias($alias, $tag);
     }
 }

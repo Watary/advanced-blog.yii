@@ -40,9 +40,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     <span><i class="fas fa-user"></i> <a href="<?= Url::to(['/profile/'.$model->author->id]) ?>"><?= $model->author->username ?></a></span>
                     <span><i class="fas fa-server"></i>
                         <?php if($model->category->title){ ?>
-                            <a href="<?= Url::to(['/blog/category/'.$model->category->alias]) ?>"><?= $model->category->title ?></a>
+                            <a href="<?= Url::to(['/categories/view/'.$model->category->id]) ?>"><?= $model->category->title ?></a>
                         <?php }else{ ?>
-                            <a href="<?= Url::to(['/blog/category/uncategorized']) ?>">Uncategorized</a>
+                            <a href="<?= Url::to(['/categories/0']) ?>">Uncategorized</a>
                         <?php } ?>
                     </span>
                     <span><i class="far fa-calendar-alt"></i> <?= date('d-m-Y | H:i', $model->created_at) ?></span>

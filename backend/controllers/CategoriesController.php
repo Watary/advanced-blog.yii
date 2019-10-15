@@ -126,7 +126,7 @@ class CategoriesController extends Controller
             $model->alias = $this->generateAlias($model->alias, $model->id);
 
             if($model->save()) {
-                return $this->redirect(Url::to(['/categories/update/' . $model->alias], true));
+                return $this->redirect(Url::to(['/categories/update/' . $model->id], true));
             }
         }
 

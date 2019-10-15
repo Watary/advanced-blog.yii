@@ -85,10 +85,11 @@ class Categories extends \yii\db\ActiveRecord
         $items_categories = [];
 
         foreach ($categories as $item){
-            $items_categories[$item->id] = $item->title;
+            $items_categories[$item->id]['value'] = $item->title;
+            $items_categories[$item->id]['parent'] = $item->id_parent;
         }
 
-        return $items_categories;
+        return Categories::constructListCategories($items_categories, NULL);
     }
 
     public static function issetAlias($alias, $category){
@@ -102,5 +103,25 @@ class Categories extends \yii\db\ActiveRecord
     public static function count()
     {
         return Categories::find()->count();
+    }
+
+    private static function constructListCategories($items_categories, $parent){
+        $return = [];
+
+        if($parent) {
+            $separator = ' - ';
+        }
+
+        foreach ($items_categories as $key => $item){
+            if($item['parent'] == $parent){
+                $return[$key] = $separator.$item['value'];
+                $array = Categories::constructListCategories($items_categories, $key);
+                foreach ($array as $key_in => $value){
+                    $return[$key_in] = $separator.$value;
+                }
+            }
+        }
+
+        return $return;
     }
 }

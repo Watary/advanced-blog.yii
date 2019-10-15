@@ -27,7 +27,9 @@ use backend\models\Articles;
             'label'=>'Category',
             'format' => 'raw',
             'value' => function($data){
-                return Html::a($data->category->title, ['categories/view/'.$data->id]);
+                if($data->category->id){
+                    return Html::a($data->category->title, ['categories/view/'.$data->id]);
+                }
             }
         ],
         [
