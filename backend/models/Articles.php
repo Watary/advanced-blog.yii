@@ -118,11 +118,9 @@ class Articles extends \yii\db\ActiveRecord
         return $this->hasMany(ArticleMark::className(), ['id_article' => 'id']);
     }
 
-    /*
     public function getComments(){
         return $this->hasMany(Comments::className(), ['id_articles' => 'id']);
     }
-    */
 
     public static function count()
     {

@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = ['label' => $breadcrumbs_title, 'url' => ['/cat
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
-<div class="blog-articles-view">
+<div class="articles-view">
     <div class="blog">
         <article class="blog-article" style="">
             <?php if($model->image){ ?>
@@ -76,27 +76,36 @@ $this->params['breadcrumbs'][] = $this->title;
         </article>
     </div>
 
-    <?php /*= $this->render('_form_comments', [
-        'id_articles' => $model->id,
-    ]) */?>
+    <div class="card">
+        <div class="card-header-tab card-header-tab-animation card-header">
+            <div class="card-header-title">
+                Comments
+            </div>
+        </div>
+        <div class="card-body">
+            <?= $this->render('_form_comments', [
+                'id_articles' => $model->id,
+            ]) ?>
 
-    <div id="form-comments-answer-hidden" class="hidden">
-        <?php /*= $this->render('_form_comments_answer', [
-            'id_articles' => $model->id,
-        ]) */?>
+            <div id="form-comments-answer-hidden" class="hidden">
+                <?= $this->render('_form_comments_answer', [
+                    'id_articles' => $model->id,
+                ]) ?>
+            </div>
+
+            <?= $this->render('comment_ajax', [
+                'comments' => $model->comments,
+                'id_article' => $model->id,
+            ]) ?>
+        </div>
     </div>
-
-    <?php /*= $this->render('comment_ajax', [
-        'comments' => $model->comments,
-        'id_article' => $model->id,
-    ])*/ ?>
 
 </div>
 
 <?php if(!$isMark && !Yii::$app->user->isGuest){ ?>
     <script>
         var id_article = <?= $model->id ?>;
-        var cop = document.getElementById("blog-comments-answer-form");
+        var cop = document.getElementById("comments-answer-form");
 
         function showFormComment(comment){
             document.getElementById("article-comments-answer").id_comment.value=comment;

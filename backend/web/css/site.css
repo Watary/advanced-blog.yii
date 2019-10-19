@@ -245,6 +245,48 @@ a.desc:after {
             padding: 0;
         }
 
+/* Comments BEGIN */
+.comments{
+    padding: 10px;
+    border: 1px solid rgba(105, 105, 105, 0.5);
+    border-radius: 8px;
+    position: relative;
+    }
+    .comments a{
+        color: #373737;
+    }
+    .comments .comment-doter{
+        background: url('/upload/design/bg-folding-dot-light.png') repeat-x 5px 0;
+        height: 10px;
+        position: absolute;
+        left: 0;
+        top: 15px;
+        visibility: hidden;
+        }
+        .comments .media-comments:hover .comment-doter{
+            visibility: visible;
+        }
+    .comments .media-comments  {
+        display: -ms-flexbox;
+        /*display: flex;*/
+        -ms-flex-align: start;
+        align-items: flex-start;
+        border-bottom: 1px solid rgba(105, 105, 105, 0.5);
+        margin-bottom: 7px;
+        padding-top: 0;
+        padding-bottom: 0;
+        position: relative;
+        }
+        .comments .media-comments .media-body {
+            -ms-flex: 1;
+            flex: 1;
+        }
+#comments-list .media-comments:nth-last-child(2){
+    border: none;
+}
+/* Comments END */
+
+
 /***/
 .select2-container--krajee .select2-selection__clear{
     top: 0.25rem;
