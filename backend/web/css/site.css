@@ -294,3 +294,13 @@ a.desc:after {
 .select2-container--krajee .select2-selection--single .select2-selection__clear {
     right: 2rem;
 }
+
+.fade-modal {
+    transition:opacity 0.3s linear;
+}
+.fade-modal:not(.show) {
+    opacity: 0;
+}
+.fade-modal.show {
+    opacity: 1;
+}

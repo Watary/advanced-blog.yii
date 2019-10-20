@@ -101,17 +101,26 @@ class CommentsController extends Controller
     }
 
     /**
-     * Deletes an existing BlogComments model.
+     * Deletes an existing Comments model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
+     * @throws NotFoundHttpException permissionDeleteComments
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        if(!Yii::$app->user->can('permissionDeleteComments')){
+            throw new NotFoundHttpException('Access denied');
+        }
 
-        return $this->redirect(['index']);
+        $model = $this->findModel($id);
+
+        if($this->deleteChild($model->id)){
+            $model->delete();
+        }
+
+        return $this->redirect(['/comments']);
     }
 
     public function actionSave()
@@ -146,9 +155,6 @@ class CommentsController extends Controller
 
             $comments = $this->constructCommentList($list_comments, NULL, 0);
 
-            return [
-                'list_comments' => $comments,
-            ];
             if ($comments) {
                 return [
                     'list_comments' => $comments,
@@ -168,11 +174,6 @@ class CommentsController extends Controller
 
             Yii::$app->response->format = Response::FORMAT_JSON;
             $data = Yii::$app->request->post();
-
-            /*$list_comments = BlogComments::findComments($data['article']);
-            $list_comments = BlogComments::findComments($data['id_comment']);*/
-
-
 
             if (1) {
                 return $this->renderAjax('_form_comments', [
@@ -216,6 +217,18 @@ class CommentsController extends Controller
             }
         }
         return $result;
+    }
+
+    private function deleteChild($id){
+
+        $list = Comments::findChild($id);
+
+        foreach ($list as $item){
+            $this->deleteChild($item->id);
+            $this->findModel($item->id)->delete();
+        }
+
+        return true;
     }
 
     /**

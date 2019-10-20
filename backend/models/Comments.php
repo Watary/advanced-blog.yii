@@ -100,4 +100,10 @@ class Comments extends \yii\db\ActiveRecord
             ->where(['id_articles' => $article])
             ->count();
     }
+
+    public static function findChild($id){
+        return Comments::find()
+            ->where(['id_comment' => $id])
+            ->all();
+    }
 }

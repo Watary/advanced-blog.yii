@@ -10,7 +10,7 @@ use backend\models\Comments;
 $this->title = 'Comments';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="blog-comments-index">
+<div class="comments-index">
     <div class="card">
         <div class="card-header-tab card-header-tab-animation card-header">
             <div class="card-header-title">
