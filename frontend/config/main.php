@@ -38,6 +38,7 @@ return [
         ],
         'urlManager' => [
             'rules' => [
+                'article/<alias:(\w|-)+>' => 'articles/view',
             ],
         ],
     ],
@@ -47,6 +48,8 @@ return [
             'site/*',
             'blog/*',
             'upload/*',
+            'article/*',
+            'articles/*',
         ]
     ],
     'params' => $params,

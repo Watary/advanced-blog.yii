@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\models;
+namespace frontend\models;
 
 use common\models\User;
 use Yii;
@@ -21,7 +21,6 @@ class Comments extends \yii\db\ActiveRecord
 {
     const STATUS_INACTIVE = 0;
     const STATUS_ACTIVE = 10;
-    const STATUS_DELETE = 100;
 
     /**
      * {@inheritdoc}
@@ -87,7 +86,6 @@ class Comments extends \yii\db\ActiveRecord
     public static function findComments($article){
         return Comments::find()
             ->where(['id_articles' => $article])
-            ->where(['status' => '10'])
             ->orderBy(['id' => SORT_DESC])
             ->all();
     }
@@ -107,17 +105,5 @@ class Comments extends \yii\db\ActiveRecord
         return Comments::find()
             ->where(['id_comment' => $id])
             ->all();
-    }
-
-    public static function findAllCommentsInArticle($article){
-        return Comments::find()
-            ->andWhere(['id_articles' => $article])
-            ->all();
-    }
-
-    public static function findCommentForId($id){
-        return Comments::find()
-            ->where(['id' => $id])
-            ->one();
     }
 }

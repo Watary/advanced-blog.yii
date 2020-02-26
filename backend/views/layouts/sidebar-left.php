@@ -58,7 +58,7 @@ $url = explode('/', substr(Url::current(), 1));
                     </a>
                 </li>
                 <li>
-                    <a href="<?= Url::to('articles', true) ?>" class="<?= $url[0] == 'articles' ? 'mm-active' : ''?>">
+                    <a href="<?= Url::to('articles', true) ?>" class="<?= $url[0] == 'articles' ? 'mm-active' :  $url[0] == 'article' ? 'mm-active' : ''?>">
                         <i class="metismenu-icon fa fa-th-list"></i>
                         Articles
                     </a>
@@ -83,51 +83,51 @@ $url = explode('/', substr(Url::current(), 1));
                         GII
                     </a>
                 </li>
-                <li>
+                <li class="<?= $url[0] == 'rbac' ? 'mm-active' : ''?>">
                     <a href="#">
                         <i class="metismenu-icon fa fa-users"></i>
                         RBAC
                         <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
                     </a>
-                    <ul>
+                    <ul class="<?= $url[0] == 'rbac' ? 'mm-show' : ''?>">
                         <li>
-                            <a href="<?= Url::to('rbac/user', true) ?>">
+                            <a href="<?= Url::to('rbac/user', true) ?>" class="<?= $url[1] == 'user' ? 'mm-active' : ''?>">
                                 <i class="metismenu-icon"></i>
                                 User
                             </a>
                         </li>
                         <li>
-                            <a href="<?= Url::to('rbac/assignment', true) ?>">
+                            <a href="<?= Url::to('rbac/assignment', true) ?>" class="<?= $url[1] == 'assignment' ? 'mm-active' : ''?>">
                                 <i class="metismenu-icon">
                                 </i>Assignment
                             </a>
                         </li>
                         <li>
-                            <a href="<?= Url::to('rbac/role', true) ?>">
+                            <a href="<?= Url::to('rbac/role', true) ?>" class="<?= $url[1] == 'role' ? 'mm-active' : ''?>">
                                 <i class="metismenu-icon">
                                 </i>Role
                             </a>
                         </li>
                         <li>
-                            <a href="<?= Url::to('rbac/permission', true) ?>">
+                            <a href="<?= Url::to('rbac/permission', true) ?>" class="<?= $url[1] == 'permission' ? 'mm-active' : ''?>">
                                 <i class="metismenu-icon">
                                 </i>Permission
                             </a>
                         </li>
                         <li>
-                            <a href="<?= Url::to('rbac/route', true) ?>">
+                            <a href="<?= Url::to('rbac/route', true) ?>" class="<?= $url[1] == 'route' ? 'mm-active' : ''?>">
                                 <i class="metismenu-icon">
                                 </i>Route
                             </a>
                         </li>
                         <li>
-                            <a href="<?= Url::to('rbac/rule', true) ?>">
+                            <a href="<?= Url::to('rbac/rule', true) ?>" class="<?= $url[1] == 'rule' ? 'mm-active' : ''?>">
                                 <i class="metismenu-icon">
                                 </i>Rule
                             </a>
                         </li>
                         <li>
-                            <a href="<?= Url::to('rbac/menu', true) ?>">
+                            <a href="<?= Url::to('rbac/menu', true) ?>" class="<?= $url[1] == 'menu' ? 'mm-active' : ''?>">
                                 <i class="metismenu-icon">
                                 </i>Menu
                             </a>

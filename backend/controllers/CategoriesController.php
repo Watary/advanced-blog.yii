@@ -40,7 +40,8 @@ class CategoriesController extends Controller
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Categories::find(),
+            'query' => Categories::find()
+                ->andWhere(['deleted_at' => NULL]),
         ]);
 
         return $this->render('index', [
@@ -161,17 +162,34 @@ class CategoriesController extends Controller
         ]);
     }
 
+
     /**
-     * Deletes an existing Categories model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * Delete an existing Categories model.
      * @param integer $id
+     *
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        if(!Yii::$app->user->can('permissionDeleteCategories')){
+            throw new NotFoundHttpException('Access denied');
+        }
 
+        $isDeleted = false;
+
+        if($model = $this->findModel($id)){
+            $model->id_deleted = Yii::$app->user->identity->getId();
+            $model->deleted_at = time();
+            if($model->save()){
+                $this->deleteArticles($model->id);
+                $isDeleted = true;
+            }
+        }else{
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+
+        //return $isDeleted;
         return $this->redirect(['index']);
     }
 
@@ -217,6 +235,11 @@ class CategoriesController extends Controller
 
         return $this->issetAlias($alias, $category);
     }
+
+    private function deleteArticles($category){
+        ArticlesController::deleteInCategory($category);
+    }
+
     /**
      * Finds the BlogCategories model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

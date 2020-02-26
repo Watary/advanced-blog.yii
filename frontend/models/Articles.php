@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\models;
+namespace frontend\models;
 
 use common\models\User;
 use Yii;
@@ -127,10 +127,6 @@ class Articles extends \yii\db\ActiveRecord
         return Articles::find()
             ->where(['deleted_at' => NULL])
             ->count();
-    }
-
-    public static function findForums($id = NULL){
-        return Comments::find()->where(['id_parent' => $id])->andWhere(['deleted_at' => NULL])->orderBy(['hot' => SORT_DESC])->all();
     }
 
     public static function getCountInCategory($category)

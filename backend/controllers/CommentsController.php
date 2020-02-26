@@ -41,7 +41,8 @@ class CommentsController extends Controller
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Comments::find(),
+            'query' => Comments::find()
+                ->where(['<>', 'status', Comments::STATUS_DELETE]),
         ]);
 
         return $this->render('index', [
@@ -114,11 +115,14 @@ class CommentsController extends Controller
             throw new NotFoundHttpException('Access denied');
         }
 
-        $model = $this->findModel($id);
+        /* Full delete comments
+         * $model = $this->findModel($id);
 
         if($this->deleteChild($model->id)){
             $model->delete();
-        }
+        }*/
+
+        $this->changeStatus($id);
 
         return $this->redirect(['/comments']);
     }
@@ -189,6 +193,47 @@ class CommentsController extends Controller
         return false;
     }
 
+    /**
+     * @return mixed
+     * @throws NotFoundHttpException permissionDeleteComments
+     */
+    public function actionChangeStatus(){
+
+        if(!Yii::$app->user->can('permissionChangeStatusComments')){
+            throw new NotFoundHttpException('Access denied');
+        }
+
+        if (Yii::$app->request->isAjax) {
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            $data = Yii::$app->request->post();
+
+            $comment = Comments::findOne($data['id_comment']);
+
+            if($comment->status == Comments::STATUS_ACTIVE){
+                $comment->status = Comments::STATUS_INACTIVE;
+            }else{
+                $comment->status = Comments::STATUS_ACTIVE;
+            }
+
+            if($comment->save()){
+                if($comment->status == Comments::STATUS_ACTIVE) {
+                    return [
+                        'status' => 'active',
+                        'updated_at' => date('d-m-Y H:i:s', $comment->updated_at),
+                    ];
+                }else{
+                    return [
+                        'status' => 'inactive',
+                        'updated_at' => date('d-m-Y H:i:s', $comment->updated_at),
+                    ];
+                }
+            }else{
+                return false;
+            }
+        }
+        return false;
+    }
+
     private function constructCommentList($list_comments, $id_parent, $level){
         $result = '';
         foreach ($list_comments as $key => $comment) {
@@ -245,5 +290,55 @@ class CommentsController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+/**********************************************************************************************************************/
+    /**
+     * @param $id integer
+     * @param $status integer
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    private function changeStatus($id, $status = Comments::STATUS_DELETE){
+        if($model = Comments::findCommentForId($id)){
+
+            $model->status = $status;
+
+            if($model->save()){
+                $list = Comments::findChild($id);
+
+                foreach ($list as $item){
+                    $this->changeStatus($item->id, $status);
+                }
+            }
+        }else{
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+
+        return true;
+    }
+
+    /**
+     * @param $id integer
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    private static function deleteComment($id){
+        if($model = Comments::findCommentForId($id)){
+            $model->status = Comments::STATUS_DELETE;
+            if($model->save()){
+                return true;
+            }
+        }else{
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+
+        return false;
+    }
+
+    public static function deleteInArticle($category){
+        $list = Comments::findAllCommentsInArticle($category);
+        foreach ($list as $item){
+            CommentsController::deleteComment($item->id);
+        }
     }
 }

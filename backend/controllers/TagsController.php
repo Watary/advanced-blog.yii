@@ -133,6 +133,10 @@ class TagsController extends Controller
      */
     public function actionDelete($id)
     {
+        if(!Yii::$app->user->can('permissionDeleteTags')){
+            throw new NotFoundHttpException('Access denied');
+        }
+
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);

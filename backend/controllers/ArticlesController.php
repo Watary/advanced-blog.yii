@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use backend\models\ArticleMark;
 use backend\models\ArticlesShow;
+use backend\models\Comments;
 use backend\models\Tags;
 use backend\models\Articles;
 use backend\models\Categories;
@@ -40,7 +41,7 @@ class ArticlesController extends Controller
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Articles::find(),
+            'query' => Articles::find()->where(['id_deleted' => NULL]),
         ]);
 
         return $this->render('index', [
@@ -76,6 +77,8 @@ class ArticlesController extends Controller
     public function actionCreate($category = NULL)
     {
         $model = new Articles();
+
+        $model->status = Articles::STATUS_ACTIVE;
 
         if($category){
             $model->id_category = $category;
@@ -141,24 +144,18 @@ class ArticlesController extends Controller
      * Delete an existing Articles model.
      * @param integer $id
      *
-     * @return boolean
+     * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionDelete($id)
     {
-        $isDeleted = false;
-
-        if($model = $this->findModel($id)){
-            $model->id_deleted = Yii::$app->user->identity->getId();
-            $model->deleted_at = time();
-            if($model->save()){
-                $isDeleted = true;
-            }
-        }else{
-            throw new NotFoundHttpException('The requested page does not exist.');
+        if(!Yii::$app->user->can('permissionDeleteArticles')){
+            throw new NotFoundHttpException('Access denied');
         }
 
-        return $isDeleted;
+        $this->deleteArticle($id);
+
+        return $this->redirect(['index']);
     }
 
     /**
@@ -290,5 +287,32 @@ class ArticlesController extends Controller
         $alias = str_replace([':',';','.',',','<','>','?','#','%'], "", $alias);
 
         return $this->issetAlias($alias, $articles);
+    }
+
+    /**
+     * @param $id integer
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    private static function deleteArticle($id){
+        if($model = Articles::findArticleForId($id)){
+            $model->id_deleted = Yii::$app->user->identity->getId();
+            $model->deleted_at = time();
+            if($model->save()){
+                CommentsController::deleteInArticle($model->id);
+                return true;
+            }
+        }else{
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+
+        return false;
+    }
+
+    public static function deleteInCategory($category){
+        $list = Articles::findAllArticlesInCategory($category);
+        foreach ($list as $item){
+            ArticlesController::deleteArticle($item->id);
+        }
     }
 }

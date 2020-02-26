@@ -1,11 +1,14 @@
 <?php
 
 use yii\helpers\Url;
+use yii\helpers\Html;
 
 ?>
 <div class="app-header header-shadow">
     <div class="app-header__logo">
-        <div class="logo-src"></div>
+        <div class="logo-src">
+            <a href="<?= Yii::$app->params['appUrl'] ?>"><img src="/upload/design/logo-app.png" alt=""></a>
+        </div>
         <div class="header__pane ml-auto">
             <div>
                 <button type="button" class="hamburger close-sidebar-btn hamburger--elastic" data-class="closed-sidebar">
@@ -78,7 +81,16 @@ use yii\helpers\Url;
                                     <h6 tabindex="-1" class="dropdown-header">Header</h6>
                                     <button type="button" tabindex="0" class="dropdown-item">Actions</button>
                                     <div tabindex="-1" class="dropdown-divider"></div>
-                                    <button type="button" tabindex="0" class="dropdown-item">Dividers</button>
+                                    <?php
+                                        if (Yii::$app->user->isGuest) {
+                                            echo Html::a('Login', Url::toRoute('site/login', true), ['class' => 'dropdown-item']);
+                                        } else {
+                                            echo Html::beginForm(['/site/logout'], 'post')
+                                                . Html::submitButton('Logout', ['class' => 'dropdown-item'])
+                                                . Html::endForm();
+                                        }
+
+                                    ?>
                                 </div>
                             </div>
                         </div>
