@@ -58,3 +58,14 @@ frontend
 vendor/                  contains dependent 3rd-party packages
 environments/            contains environment-based overrides
 ```
+
+
+Migrate
+-------
+yii migrate
+
+
+yii migrate --migrationPath=@mdm/admin/migrations
+
+
+yii migrate --migrationPath=@yii/rbac/migrations
