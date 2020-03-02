@@ -9,6 +9,21 @@ return [
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
+        'authClientCollection' => [
+            'class' => 'yii\authclient\Collection',
+            'clients' => [
+                'facebook' => [
+                    'class' => 'yii\authclient\clients\Facebook',
+                    'clientId' => '2595092610780232',
+                    'clientSecret' => '456c6c8882933760df09653497efe339',
+                ],
+                'google' => [
+                  'class' => 'yii\authclient\clients\Google',
+                  'clientId' => '912869265892-dqfguknel2ag7r1413jnqpedmnajusb3.apps.googleusercontent.com',
+                  'clientSecret' => 'Q8vv1uEBgAak-OngkUmBtsI9',
+              ],
+            ],
+        ],
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,

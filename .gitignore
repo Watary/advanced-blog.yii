@@ -1,5 +1,5 @@
 # yii console commands
-/yii
+### /yii
 /yii_test
 /yii_test.bat
 
@@ -35,9 +35,9 @@ phpunit.phar
 /.vagrant
 
 # ignore generated files
-/frontend/web/index.php
+### /frontend/web/index.php
 /frontend/web/index-test.php
 /frontend/web/robots.txt
-/backend/web/index.php
+### /backend/web/index.php
 /backend/web/index-test.php
 /backend/web/robots.txt

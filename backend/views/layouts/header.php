@@ -97,7 +97,10 @@ use yii\helpers\Html;
 
                         <div class="widget-content-left  ml-3 header-user-info">
                             <div class="widget-heading">
-                                <?= Yii::$app->user->identity->username ?>
+                                <?php if (!Yii::$app->user->isGuest){ ?>
+                                    <?= Yii::$app->user->identity->username ?>
+                                <?php }else{ ?>
+                                <?php } ?>
                             </div>
                             <div class="widget-subheading">
 

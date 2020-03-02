@@ -1,5 +1,6 @@
 <?php
 namespace frontend\controllers;
+use app\components\AuthHandler;
 
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
@@ -64,7 +65,16 @@ class SiteController extends Controller
                 'class' => 'yii\captcha\CaptchaAction',
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
             ],
+            'auth' => [
+                'class' => 'yii\authclient\AuthAction',
+                'successCallback' => [$this, 'onAuthSuccess'],
+            ],
         ];
+    }
+
+    public function onAuthSuccess($client)
+    {
+        (new AuthHandler($client))->handle();
     }
 
     /**
