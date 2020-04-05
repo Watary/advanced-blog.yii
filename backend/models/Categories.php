@@ -110,6 +110,7 @@ class Categories extends \yii\db\ActiveRecord
 
     private static function constructListCategories($items_categories, $parent){
         $return = [];
+        $separator = '';
 
         if($parent) {
             $separator = ' - ';
