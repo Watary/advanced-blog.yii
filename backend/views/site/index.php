@@ -38,11 +38,13 @@ $this->title = 'Dashboard';
                             </div>
                         </div>
 
+						<?php if($article['count_all']){ ?>
                         <div class="mb-3 progress">
                             <div class="progress-bar bg-success" data-toggle="tooltip" data-placement="top" title="Active" role="progressbar" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100" style="width: <?= $article['count_active'] / ($article['count_all'] / 100) ?>%;"><?= $article['count_active'] ?> | <?= $article['count_active'] / ($article['count_all'] / 100) ?>%</div>
                             <div class="progress-bar bg-danger" data-toggle="tooltip" data-placement="top" title="Inactive" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="width: <?= $article['count_inactive'] / ($article['count_all'] / 100) ?>%;"><?= $article['count_inactive'] ?> | <?= $article['count_inactive'] / ($article['count_all'] / 100) ?></div>
                             <div class="progress-bar bg-dark" data-toggle="tooltip" data-placement="top" title="Trash" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="width: <?= $article['count_delete'] / ($article['count_all'] / 100) ?>%;"><?= $article['count_delete'] ?> | <?= $article['count_delete'] / ($article['count_all'] / 100) ?></div>
                         </div>
+                    	<?php } ?>
 
                         <ul class="list-group">
                             <?php foreach($article['last_articles'] as $item){ ?>
