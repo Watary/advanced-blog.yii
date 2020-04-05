@@ -72,10 +72,15 @@ class ArticlesController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @param integer $category
      *
+     * @throws NotFoundHttpException permissionCreateArticles
      * @return mixed
      */
     public function actionCreate($category = NULL)
     {
+        if(!Yii::$app->user->can('permissionCreateArticles')){
+            throw new NotFoundHttpException('Access denied');
+        }
+
         $model = new Articles();
 
         $model->status = Articles::STATUS_ACTIVE;
@@ -109,10 +114,15 @@ class ArticlesController extends Controller
      * @param integer $id
      *
      * @return mixed
+     * @throws NotFoundHttpException permissionUpdateArticles
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionUpdate($id)
     {
+        if(!Yii::$app->user->can('permissionUpdateArticles')){
+            throw new NotFoundHttpException('Access denied');
+        }
+
         $model = $this->findModel($id);
         $isSave = false;
 
@@ -146,10 +156,11 @@ class ArticlesController extends Controller
      *
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
+     * @throws NotFoundHttpException permissionRemoveArticles
      */
     public function actionDelete($id)
     {
-        if(!Yii::$app->user->can('permissionDeleteArticles')){
+        if(!Yii::$app->user->can('permissionRemoveArticles')){
             throw new NotFoundHttpException('Access denied');
         }
 
@@ -232,6 +243,47 @@ class ArticlesController extends Controller
             return $mark_sum / $mark_count;
         }
 
+        return false;
+    }
+
+    /**
+     * @return mixed
+     * @throws NotFoundHttpException permissionChangeStatusArticles
+     */
+    public function actionChangeStatus(){
+
+        if(!Yii::$app->user->can('permissionChangeStatusArticles')){
+            throw new NotFoundHttpException('Access denied');
+        }
+
+        if (Yii::$app->request->isAjax) {
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            $data = Yii::$app->request->post();
+
+            $article = Articles::findOne($data['id_article']);
+
+            if($article->status == Articles::STATUS_ACTIVE){
+                $article->status = Articles::STATUS_INACTIVE;
+            }else{
+                $article->status = Articles::STATUS_ACTIVE;
+            }
+
+            if($article->save()){
+                if($article->status == Articles::STATUS_ACTIVE) {
+                    return [
+                        'status' => 'active',
+                        'updated_at' => date('d-m-Y H:i:s', $article->updated_at),
+                    ];
+                }else{
+                    return [
+                        'status' => 'inactive',
+                        'updated_at' => date('d-m-Y H:i:s', $article->updated_at),
+                    ];
+                }
+            }else{
+                return false;
+            }
+        }
         return false;
     }
 

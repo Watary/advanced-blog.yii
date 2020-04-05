@@ -6,6 +6,7 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
+use backend\models\Articles;
 use backend\models\Signup;
 
 /**
@@ -47,7 +48,13 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $params['article']['last_articles'] = Articles::findLastArticle(5);
+        $params['article']['count_all'] = Articles::countArticlesAll();
+        $params['article']['count_active'] = Articles::countArticlesActive();
+        $params['article']['count_inactive'] = Articles::countArticlesInactive();
+        $params['article']['count_delete'] = Articles::countArticlesDelete();
+
+        return $this->render('index', $params);
     }
 
     /**
@@ -57,6 +64,8 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
+        $this->layout = 'login';
+
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }

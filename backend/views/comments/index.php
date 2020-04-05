@@ -124,7 +124,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 _csrf: '<?=Yii::$app->request->getCsrfToken()?>'
             },
             success: function (data) {
-                if(data.status != 'active') {
+                if(data.status !== 'active') {
                     comment.classList.remove("glyphicon-minus");
                     comment.classList.remove("text-danger");
 

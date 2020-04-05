@@ -30,6 +30,7 @@ class Articles extends \yii\db\ActiveRecord
 {
     const STATUS_INACTIVE = 0;
     const STATUS_ACTIVE = 10;
+    const STATUS_DELETE = 100;
 
     public $tags;
 
@@ -130,7 +131,11 @@ class Articles extends \yii\db\ActiveRecord
     }
 
     public static function findForums($id = NULL){
-        return Comments::find()->where(['id_parent' => $id])->andWhere(['deleted_at' => NULL])->orderBy(['hot' => SORT_DESC])->all();
+        return Comments::find()
+            ->where(['id_parent' => $id])
+            ->andWhere(['deleted_at' => NULL])
+            ->orderBy(['hot' => SORT_DESC])
+            ->all();
     }
 
     public static function getCountInCategory($category)
@@ -154,6 +159,14 @@ class Articles extends \yii\db\ActiveRecord
             ->where(['alias' => $alias])
             ->andWhere(['deleted_at' => NULL])
             ->one();
+    }
+
+    public static function findLastArticle($count){
+        return Articles::find()
+            ->andWhere(['deleted_at' => NULL])
+            ->orderBy(['created_at' => SORT_DESC])
+            ->limit($count)
+            ->all();
     }
 
     public static function findArticleForId($id){
@@ -197,6 +210,29 @@ class Articles extends \yii\db\ActiveRecord
         return Articles::find()
             ->where(['id_category' => NULL])
             ->andWhere(['deleted_at' => NULL])
+            ->count();
+    }
+
+    public static function countArticlesActive(){
+        return Articles::find()
+            ->where(['status' => Articles::STATUS_ACTIVE])
+            ->count();
+    }
+
+    public static function countArticlesInactive(){
+        return Articles::find()
+            ->where(['status' => Articles::STATUS_INACTIVE])
+            ->count();
+    }
+
+    public static function countArticlesDelete(){
+        return Articles::find()
+            ->where(['status' => Articles::STATUS_DELETE])
+            ->count();
+    }
+
+    public static function countArticlesAll(){
+        return Articles::find()
             ->count();
     }
 }

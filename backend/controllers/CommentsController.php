@@ -66,10 +66,15 @@ class CommentsController extends Controller
     /**
      * Creates a new Comments model.
      * If creation is successful, the browser will be redirected to the 'view' page.
+     * @throws NotFoundHttpException permissionCreateComments
      * @return mixed
      */
     public function actionCreate()
     {
+        if(!Yii::$app->user->can('permissionCreateComments')){
+            throw new NotFoundHttpException('Access denied');
+        }
+
         $model = new Comments();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -87,9 +92,14 @@ class CommentsController extends Controller
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
+     * @throws NotFoundHttpException permissionUpdateComments
      */
     public function actionUpdate($id)
     {
+        if(!Yii::$app->user->can('permissionUpdateComments')){
+            throw new NotFoundHttpException('Access denied');
+        }
+
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -107,11 +117,11 @@ class CommentsController extends Controller
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
-     * @throws NotFoundHttpException permissionDeleteComments
+     * @throws NotFoundHttpException permissionRemoveComments
      */
     public function actionDelete($id)
     {
-        if(!Yii::$app->user->can('permissionDeleteComments')){
+        if(!Yii::$app->user->can('permissionRemoveComments')){
             throw new NotFoundHttpException('Access denied');
         }
 
@@ -127,8 +137,16 @@ class CommentsController extends Controller
         return $this->redirect(['/comments']);
     }
 
+    /**
+     * @throws NotFoundHttpException permissionCreateComments
+     * @return mixed
+     */
     public function actionSave()
     {
+        if(!Yii::$app->user->can('permissionCreateComments')){
+            throw new NotFoundHttpException('Access denied');
+        }
+
         $request = \Yii::$app->getRequest();
         $data = Yii::$app->request->post();
         \Yii::$app->response->format = Response::FORMAT_JSON;
@@ -146,6 +164,8 @@ class CommentsController extends Controller
                 return ['success' => $model];
             }
         }
+
+        return false;
     }
 
     public function actionFindComments(){
@@ -265,6 +285,9 @@ class CommentsController extends Controller
     }
 
     private function deleteChild($id){
+        if(!Yii::$app->user->can('permissionRemoveComments')){
+            return false;
+        }
 
         $list = Comments::findChild($id);
 

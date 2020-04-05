@@ -9,6 +9,7 @@ return [
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
+        /**
         'authClientCollection' => [
             'class' => 'yii\authclient\Collection',
             'clients' => [
@@ -24,6 +25,7 @@ return [
               ],
             ],
         ],
+        */
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,

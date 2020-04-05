@@ -24,6 +24,7 @@ class Categories extends \yii\db\ActiveRecord
 {
     const STATUS_INACTIVE = 0;
     const STATUS_ACTIVE = 10;
+    const STATUS_DELETE = 100;
 
     /**
      * {@inheritdoc}

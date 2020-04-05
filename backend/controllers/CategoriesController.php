@@ -208,6 +208,46 @@ class CategoriesController extends Controller
         return false;
     }
 
+    /**
+     * AJAX
+     * @return mixed
+     * @throws NotFoundHttpException permissionChangeStatusCategories
+     */
+    public function actionChangeStatus(){
+
+        if(!Yii::$app->user->can('permissionChangeStatusCategories')){
+            throw new NotFoundHttpException('Access denied');
+        }
+
+        if (Yii::$app->request->isAjax) {
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            $data = Yii::$app->request->post();
+
+            $article = Categories::findOne($data['id_category']);
+
+            if($article->status == Categories::STATUS_ACTIVE){
+                $article->status = Categories::STATUS_INACTIVE;
+            }else{
+                $article->status = Categories::STATUS_ACTIVE;
+            }
+
+            if($article->save()){
+                if($article->status == Categories::STATUS_ACTIVE) {
+                    return [
+                        'status' => 'active',
+                    ];
+                }else{
+                    return [
+                        'status' => 'inactive',
+                    ];
+                }
+            }else{
+                return false;
+            }
+        }
+        return false;
+    }
+
     private function issetAlias($alias, $category){
 
         for(;;) {
