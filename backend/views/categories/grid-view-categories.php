@@ -27,7 +27,8 @@ use backend\models\Categories;
             'label'=>'Parent',
             'format' => 'raw',
             'value' => function($data){
-                return Html::a($data->parent->title, ['categories/view/'.$data->id]);
+            	if (isset($data->parent))
+                	return Html::a($data->parent->title, ['categories/view/'.$data->id]);
             }
         ],
         [
