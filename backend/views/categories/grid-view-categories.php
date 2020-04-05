@@ -27,8 +27,7 @@ use backend\models\Categories;
             'label'=>'Parent',
             'format' => 'raw',
             'value' => function($data){
-                if($data->parent->status == Categories::STATUS_ACTIVE)
-                    return Html::a($data->parent->title, ['categories/view/'.$data->id]);
+                return Html::a($data->parent->title, ['categories/view/'.$data->id]);
             }
         ],
         [
